@@ -49,7 +49,7 @@ lombok.addLombokGeneratedAnnotation=true
 ```
 
 ### Consider
-* If we have problems with the Intellij IDE, and it does not recognize any GET/SET, it is best to close it and reopen it :kissing:
+* If we have problems with the Intellij IDE, and it does not recognize any GET/SET, it is best to close it and reopen it XD
 * It is recommended that you review your project's annotation settings. Go to ...
     *  Preference -> Build, Execution, Deployment -> Compile -> Annotation Processors.
     *  The "Enable annotation processing" check of the project must be checked
