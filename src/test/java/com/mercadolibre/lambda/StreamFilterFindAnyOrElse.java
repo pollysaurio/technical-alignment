@@ -13,7 +13,7 @@ public class StreamFilterFindAnyOrElse {
 
     private final List<PersonDTO> persons = Arrays.asList(
             new PersonDTO("Damian", 34),
-            new PersonDTO("Caro", 24),
+            new PersonDTO("Caro", 22),
             new PersonDTO("Gus", 49)    // no le digan a Gus
     );
 

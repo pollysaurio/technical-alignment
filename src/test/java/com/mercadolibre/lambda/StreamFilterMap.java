@@ -18,7 +18,7 @@ public class StreamFilterMap {
 
     private final List<PersonDTO> persons = Arrays.asList(
             new PersonDTO("Damian", 34),
-            new PersonDTO("Caro", 24),
+            new PersonDTO("Caro", 22),
             new PersonDTO("Gus", 49)    // no le digan a Gus
     );
 
@@ -26,8 +26,8 @@ public class StreamFilterMap {
     public void filterMapReturnString() {
         String filterName_1 = "Damian";
 
-        String result = persons.stream()
-                .map(PersonDTO::getName)            // convertimos el Stream en un String
+        String result = persons.stream()            // convertimos el Stream en un String
+                .map(PersonDTO::getName)
                 .filter(filterName_1::equals)       // aplicamos el filtro simplificado
                 .findAny()
                 .orElse("");

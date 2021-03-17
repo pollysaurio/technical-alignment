@@ -34,7 +34,7 @@ public class StreamFilterCollect {
         String filterName = "Gus";
 
         List<String> result = namesList.stream()            // Convertimos la lista en Stream
-                .filter(line -> !filterName.equals(line))   // aplicamos el filtro
+                .filter(name -> !filterName.equals(name))   // aplicamos el filtro
                 .collect(Collectors.toList());              // recolectamos la salida y convertimos el stream en una lista
 
         result.forEach(System.out::println);
