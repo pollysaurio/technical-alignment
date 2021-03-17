@@ -6,10 +6,13 @@ import com.mercadolibre.dto.PersonDTO;
 import com.mercadolibre.dto.ResponseNodeDTO;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class StreamFilterMap {
 
@@ -39,14 +42,18 @@ public class StreamFilterMap {
     }
 
     @Test
-    public void createHashMapMapFromList() {
-        List<ResponseNodeDTO> responseNodeDTOList = Arrays.asList(
-                createResponseNodeDTO(1L, "requestId_1", 200),
-                createResponseNodeDTO(2L, "requestId_2", 500),
-                createResponseNodeDTO(3L, "requestId_3", 404),
-                createResponseNodeDTO(4L, "requestId_4", 200),
-                createResponseNodeDTO(5L, "requestId_5", 500)
-        );
+    public void createMapFromList() {
+        List<ResponseNodeDTO> responseNodeDTOList = new ArrayList<>();
+        ResponseNodeDTO responseNodeDTO1 = createResponseNodeDTO(1L, "requestId_1", 200);
+        ResponseNodeDTO responseNodeDTO2 = createResponseNodeDTO(2L, "requestId_2", 500);
+        ResponseNodeDTO responseNodeDTO3 = createResponseNodeDTO(3L, "requestId_3", 404);
+        ResponseNodeDTO responseNodeDTO4 = createResponseNodeDTO(4L, "requestId_4", 200);
+        ResponseNodeDTO responseNodeDTO5 = createResponseNodeDTO(5L, "requestId_5", 500);
+        responseNodeDTOList.add(responseNodeDTO1);
+        responseNodeDTOList.add(responseNodeDTO2);
+        responseNodeDTOList.add(responseNodeDTO3);
+        responseNodeDTOList.add(responseNodeDTO4);
+        responseNodeDTOList.add(responseNodeDTO5);
 
         Map<String, NodeDTO> requestNodeMap = responseNodeDTOList.stream().collect(Collectors.toMap(
                 ResponseNodeDTO::getRequest_id, ResponseNodeDTO::getNode
@@ -69,6 +76,30 @@ public class StreamFilterMap {
                 )
         );
         System.out.println(statusNodeListMap);
+
+        /* Valores repetidos */
+        ResponseNodeDTO responseNodeDTO6 = createResponseNodeDTO(6L, "requestId_1", 200);
+        responseNodeDTOList.add(responseNodeDTO6);
+        assertThrows(Exception.class, () ->
+                responseNodeDTOList.stream().collect(Collectors.toMap(
+                        ResponseNodeDTO::getRequest_id,
+                        ResponseNodeDTO::getNode
+                ))
+        );
+
+        Map<String, NodeDTO> requestNodeMapWithOldValue = responseNodeDTOList.stream().collect(Collectors.toMap(
+                ResponseNodeDTO::getRequest_id,
+                ResponseNodeDTO::getNode,
+                (oldValue, newValue) -> oldValue    // Me quedo con el valor viejo
+        ));
+        System.out.println(requestNodeMapWithOldValue);
+
+        Map<String, NodeDTO> requestNodeMapWithNewValue = responseNodeDTOList.stream().collect(Collectors.toMap(
+                ResponseNodeDTO::getRequest_id,
+                ResponseNodeDTO::getNode,
+                (oldValue, newValue) -> newValue    // Me quedo con el valor nuevo
+        ));
+        System.out.println(requestNodeMapWithNewValue);
     }
 
     /********* UTILS *********/
@@ -88,7 +119,7 @@ public class StreamFilterMap {
                 "       \"last_modified\": \"2020-09-29T13:44:44.000-04:00\"\n" +
                 "   },\n" +
                 "   \"request_id\": \"" + requestId + "\",\n" +
-                "   \"status\":" + status +"\n" +
+                "   \"status\":" + status + "\n" +
                 "}\n";
         Gson gson = new Gson();
         return gson.fromJson(StringJson, ResponseNodeDTO.class);
